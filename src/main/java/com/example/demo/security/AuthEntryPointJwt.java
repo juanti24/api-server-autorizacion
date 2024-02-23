@@ -15,16 +15,18 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * 
+ * 
+ * Clase que retorna un mensaje cuando la autenticación no es válida.
+ */
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
-
-	// Gestionar cuando la autenticación no es valida presenta un mensaje
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
@@ -33,11 +35,10 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 		body.put("error", "Unauthorized");
 		body.put("message", authException.getMessage());
 		body.put("path", request.getServletPath());
-		body.put("adicional","revisa bien tu usuario y contraseña");
+		body.put("adicional", "revisa bien tu usuario y password");
 
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.writeValue(response.getOutputStream(), body);
-
 	}
 
 }

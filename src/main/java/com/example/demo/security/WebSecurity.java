@@ -17,55 +17,42 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurity {
 
 	@Autowired
-	private UserDetailsService detailService;
+	private UserDetailsService detailsService;
+
 	@Autowired
-	private AuthEntryPointJwt authEntryPointJwt;
+	private AuthEntryPointJwt authEntryPointJWT;
 
-	// Sring security: Automaticamente mi API queda asegurada
-	// Configuración de mi API
-	// API de obtener token debe ser publica
-
-	/// API/v1.0/Seguridad/autorizaciones/jwt/**
-
+	// /API/v1.0/seguridad/autorizaciones/jwt/**
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
+		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(authEntryPointJWT).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.antMatchers("/autorizaciones/jwt/**").permitAll().antMatchers("/autorizaciones/jwt/**").permitAll()
-				.anyRequest().authenticated();
+				.antMatchers("/autorizaciones/jwt/**").permitAll()
+				.antMatchers("/autorizaciones/jwt/**").permitAll().anyRequest().authenticated();
 
 		http.authenticationProvider(authenticationProvider());
 
 		return http.build();
 	}
 
-	// Autenticación
+	// Autenticacion relacion directa
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
-		// Dao: Acceso a datos
-		// Accede al proveedor de autenticación
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-		// Usuario
-		authProvider.setUserDetailsService(detailService);
-		// Password con el que se va a codificar
+
+		authProvider.setUserDetailsService(detailsService);
 		authProvider.setPasswordEncoder(passwordEncoder());
 
 		return authProvider;
 	}
-
-	// Permite gestionar la autenticacion en mi API
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
 		return authConfig.getAuthenticationManager();
 	}
 
-	// Es una mala practica que el password se guarde en texto plano
-
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		// Tipo de algoritmo con el que se va a encriptar ne la base de datos
 		return new BCryptPasswordEncoder();
 	}
-
 }

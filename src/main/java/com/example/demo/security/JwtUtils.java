@@ -8,23 +8,23 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+
+
+
 @Component
 public class JwtUtils {
 
-	@Value("${app.jwtExpirationMs}")
-	private int jwtExpirationMs;
 	@Value("${app.jwtSemilla}")
 	private String jwtSemilla;
-	
-	// Construir el token
+
+	@Value("${app.jwtExpirationMs}")
+	private int jwtExpirationMs;
+
 	public String buildTokenJwt(String nombre) {
-
-		// setSubject es el payload
-
-		// Token: una fortaleza es que tiene tiempo de expiración
 		return Jwts.builder().setSubject(nombre).setSubject("Hola Mundo").setIssuedAt(new Date())
-				.setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
-				.signWith(SignatureAlgorithm.HS512, this.jwtSemilla).compact();
+				.setExpiration(new Date(System.currentTimeMillis() + this.jwtExpirationMs))
+				.signWith(SignatureAlgorithm.HS512,
+						"miSemillaEsDeMasCaryuyuyuyuyuy27834672364782364782dghhjsdgf5656565675765ghgfhgfghfghfhfhjfh6687687687")
+				.compact();
 	}
-
 }

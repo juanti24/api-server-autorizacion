@@ -9,17 +9,17 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.repository.modelo.Usuario;
 
-@Repository
 @Transactional
-public class UsarioRepositoryImpl implements IUsarioRepository {
+@Repository
+public class UsuarioRepositoryImpl implements IUsuarioRepository {
 
 	@PersistenceContext
-	private EntityManager et;
+	private EntityManager entityManager;
 
 	@Override
 	public Usuario consultarPorNombre(String nombre) {
 		// TODO Auto-generated method stub
-		TypedQuery<Usuario> myQuery = this.et.createNamedQuery("SELECT u FROM Usuario u WHERE u.nombre= :nombre",
+		TypedQuery<Usuario> myQuery = this.entityManager.createQuery("SELECT u FROM Usuario u WHERE u.nombre = :nombre",
 				Usuario.class);
 		myQuery.setParameter("nombre", nombre);
 		return myQuery.getSingleResult();

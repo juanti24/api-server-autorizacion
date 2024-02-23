@@ -19,28 +19,25 @@ import com.example.demo.service.to.UsuarioTo;
 public class AuthorizationControllerRestFul {
 
 	@Autowired
-	private AuthenticationManager authM;
+	private AuthenticationManager authenticationManager;
 
 	@Autowired
 	private JwtUtils jwt;
 
-	@GetMapping(path = "jwt", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/jwt", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String obtenerToken(@RequestBody UsuarioTo usuario) {
-		// Autenticación
-		// Validad el usuario y el password que sean correctos
-		// si es correcta la autenticación ricien ahi retorno el token (autorización que
-		// le permite enviar al servicio de negocio)
+		// Autenticacion
+		// Validar el usuario y el password sean correctos
+		// si es correcta la autenticacion retorno token
+		System.out.println(usuario);
 		this.autenticacion(usuario.getNombre(), usuario.getPassword());
-		return this.jwt.buildTokenJwt(usuario.getNombre());
+		
+		return new JwtUtils().buildTokenJwt(usuario.getNombre());
 	}
 
-	// Manera automática
 	private void autenticacion(String usuario, String password) {
 		UsernamePasswordAuthenticationToken usuarioToken = new UsernamePasswordAuthenticationToken(usuario, password);
-
-		Authentication autenticacion = this.authM.authenticate(usuarioToken);
-
+		Authentication autenticacion = this.authenticationManager.authenticate(usuarioToken);
 		SecurityContextHolder.getContext().setAuthentication(autenticacion);
 	}
-
 }
